@@ -6,7 +6,7 @@
         <tr>
         <th>No</th>
         <th>id_penjualan</th>
-        <th>Nomor Penjualan</th>
+        <th>Nomor Transaksi</th>
         <th>Total Harga</th>
         <th>Tanggal Dibuat</th>
         <th>Status</th>
@@ -19,23 +19,23 @@
             <tr>
                 <td><?php echo $no++ ?></td>
                 <td class="id_penjualan"><?php echo $pjl->id ?></td>
-                <td class="no_penjualan"><?php echo $pjl->no_penjualan ?></td>
+                <td class="no_penjualan"><?php echo $pjl->no_transaksi ?></td>
                 <td class="total_harga">Rp <?php echo number_format($pjl->total_harga,0,',','.') ?></td> 
-                <td class="tanggal_dibuat"><?php echo $pjl->tanggal_dibuat ?></td>
+                <td class="tanggal_dibuat"><?php echo $pjl->tanggal ?></td>
                 <td class="status"><?php echo $pjl->status ?></td>
                 <td>
                 <?php if($pjl->status == 'Menunggu Pembayaran') : ?>
-                  <?php echo anchor ('user/data_user/invoice_pembelian/' .$pjl->id, '<div class="btn btn-success btn-sm">Bayar</div>') ?>
+                  <?php echo anchor ('user/data_user/invoice_pembelian/' .$pjl->no_transaksi, '<div class="btn btn-success btn-sm">Bayar</div>') ?>
                 <?php elseif($pjl->status == 'Pembayaran Telah Dilakukan') : ?>
-                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->id, '<div class="btn btn-success btn-sm">Details</div>') ?>          
+                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->no_transaksi, '<div class="btn btn-success btn-sm">Details</div>') ?>          
                 <?php elseif($pjl->status == 'Pembayaran Berhasil') : ?>
-                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->id, '<div class="btn btn-success btn-sm">Details</div>') ?>          
+                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->no_transaksi, '<div class="btn btn-success btn-sm">Details</div>') ?>          
                 <?php elseif($pjl->status == 'Proses Packing') : ?>
-                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->id, '<div class="btn btn-success btn-sm">Details</div>') ?>          
+                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->no_transaksi, '<div class="btn btn-success btn-sm">Details</div>') ?>          
                 <?php elseif($pjl->status == 'Proses Pengiriman') : ?>
-                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->id, '<div class="btn btn-success btn-sm">Details</div>') ?>          
+                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->no_transaksi, '<div class="btn btn-success btn-sm">Details</div>') ?>          
                 <?php elseif($pjl->status == 'Proses Selesai') : ?>
-                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->id, '<div class="btn btn-success btn-sm">Details</div>') ?>          
+                  <?php echo anchor ('user/data_user/detail_pembelian/' .$pjl->no_transaksi, '<div class="btn btn-success btn-sm">Details</div>') ?>          
                 <?php endif; ?>
                 </td>
                 <!-- <button  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit_penjualan"><i class="fas fa-edit"></i></button>

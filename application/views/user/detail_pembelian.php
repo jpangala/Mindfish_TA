@@ -13,16 +13,23 @@
   <article class="card">
     <header class="card-header"> My Orders / Tracking </header>
     <div class="card-body">
-      <?php foreach ($penjualan as $pjl) { ?>
-        <h6>Nomor Penjualan : <?= $pjl->no_penjualan ?></h6>
+      <?php foreach ($info as $pjl) { ?>
+        <h6>Nomor Transaksi : <?= $pjl->no_transaksi ?></h6>
+        <?php } ?>
         <article class="card">
           <div class="card-body row">
-            <div class="col-3"> <strong>Nama Pembeli :</strong> <br><?= $pjl->nama_pembeli ?> </div>
-            <div class="col"> <strong>Alamat Pengiriman:</strong> <br> <?= $pjl->alamat_pengiriman ?>, | <i class="fa fa-phone"></i> +1598675986 </div>
+            <?php foreach ($user as $pjl) { ?>
+            <div class="col-3"> <strong>Nama Pembeli :</strong> <br><?= $pjl->nama_customer ?> </div>
+            <div class="col"> <strong>Alamat Pengiriman:</strong> <br> <?= $pjl->alamat_customer ?> | <i class="fa fa-phone"></i> <?= $pjl->nomor_telp ?> </div>
+            <?php } ?>
+            <?php foreach ($info as $pjl) { ?>
             <div class="col"> <strong>Status:</strong> <br> <?= $pjl->status ?> </div>
-            
+            <?php } ?>
+
+
           </div>
         </article>
+        <?php foreach ($info as $pjl) { ?>
         <div class="track" style="margin-bottom: 5rem;">
           <?php if ($pjl->status == 'Pembayaran Telah Dilakukan') : ?>
             <div class="step active"> <span class="icon"> <i class="fas fa-dollar-sign"></i> </span> <span class="text">Pembayaran Telah Dilakukan</span> </div>
@@ -70,7 +77,7 @@
         </thead>
         <?php
         $no = 1;
-        foreach ($detail as $dtl) { ?>
+        foreach ($penjualan as $dtl) { ?>
           <tr>
             <td><?php echo $no++ ?></td>
             <td class="no_penjualan"><?php echo $dtl->nama_ikan ?></td>

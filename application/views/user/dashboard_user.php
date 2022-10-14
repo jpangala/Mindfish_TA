@@ -19,7 +19,17 @@
                                         <div class="col-md-6 pb-2">
                                             <!-- Nama -->
                                             <label class="form-label">Nama Lengkap *</label>
-                                            <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap" aria-label="Nama Lengkap" value="<?= $usr->nama_user; ?>">
+                                            <input type="text" name="nama_customer" class="form-control" placeholder="Nama Lengkap" aria-label="Nama Lengkap" value="<?= $usr->nama_customer; ?>">
+                                        </div>
+                                        <div class="col-md-6 pb-2">
+                                            <!-- Nama -->
+                                            <label class="form-label">Nomor Telepon</label>
+                                            <input type="text" name="nomor_telp" class="form-control"  aria-label="Nama Lengkap" value="<?= $usr->nomor_telp; ?>">
+                                        </div>
+                                        <div class="col-md-6 pb-2">
+                                            <!-- Nama -->
+                                            <label class="form-label">Alamat Lengkap</label>
+                                            <input type="text" name="alamat_customer" class="form-control"  aria-label="Nama Lengkap" value="<?= $usr->alamat_customer; ?>">
                                         </div>
                                         <!-- Update -->
                                         <div class="gap-3 mt-4 justify-content-md-end text-center">
@@ -47,7 +57,7 @@
                                             <th>No</th>
                                             <th>Nomor Pesanan</th>
                                             <th>Status</th>
-                                            <th>Total Harga</th>
+                                            <th>Tanggal</th>
                                         </tr>
                                     </thead>
                                     <?php
@@ -55,9 +65,9 @@
                                     foreach ($penjualan as $pjl) : ?>
                                         <tr>
                                             <td><?php echo $no++; ?></td>
-                                            <td><?php echo $pjl->no_penjualan; ?></td>
+                                            <td><?php echo $pjl->no_transaksi; ?></td>
                                             <td><?php echo $pjl->status; ?></td>
-                                            <td>Rp <?php echo number_format($pjl->total_harga, 0, ',', '.'); ?></td>
+                                            <td><?php echo $pjl->tanggal; ?></td>
                                         </tr>
                                     <?php endforeach ?>
                                 </table>

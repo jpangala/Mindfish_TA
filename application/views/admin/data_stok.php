@@ -9,7 +9,7 @@
         <th>No1</th>
         <th>Noo</th>
         <th>Nama Ikan</th>
-        <th>Status</th>
+        <th>Jumlah</th>
         <th>Keterangan</th>
         <th>Timestamp</th>
         <th>AKSI</th>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 25, 2022 at 02:47 PM
+-- Generation Time: Sep 29, 2022 at 02:39 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_mindfish`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer`
+--
+
+CREATE TABLE `customer` (
+  `id` int(11) NOT NULL,
+  `nama_customer` varchar(50) NOT NULL,
+  `nomor_telp` varchar(13) NOT NULL,
+  `alamat_customer` varchar(250) NOT NULL,
+  `id_akun` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `customer`
+--
+
+INSERT INTO `customer` (`id`, `nama_customer`, `nomor_telp`, `alamat_customer`, `id_akun`) VALUES
+(1, 'Obed Jack Gredo', '0222014832', 'Jl Mustang 46, Bandung, Jawa Barat 40164', 6),
+(2, 'Daniel Felix', '0215229484', 'Jl HR Rasuna Said Kav X-6/8 Sentra Mulia Lt 17 607, Dki Jakarta 12940', 12);
 
 -- --------------------------------------------------------
 
@@ -146,8 +168,8 @@ INSERT INTO `ikan` (`id`, `id_jenis`, `nama_ikan`, `deskripsi`, `harga`, `gambar
 (20, 0, 'Cupang Crown Tail', 'Ikan cupang crown tail (cupang hias serit) merupakan ikan asli Indonesia. Cupang jenis crowntail dapat memakan puluhan jentik dan telur nyamuk sampai tidak tersisa. Ciri yang menonjol pada ikan ini memiliki gerakan agresif dan memiliki warna yang indah.', 25000, 'cupang_crowntail.jpg'),
 (21, 0, 'Manfish Altum', 'ikan manfish jenis ini cenderung susah karena membutuhkan ruang yang luas serta membutuhkan bebatuan dan tanaman sebagai tempat berlindung. Ikan manfish altum juga termasuk dari tiga ikan terbesar dari spesies ikan angelfish.', 50000, 'manfish_altum.jpg'),
 (22, 0, 'Arwana Brazil', 'Merupakan Ikan hias yang langka dan sangat sensitif dalam peIkan Arwana Brazil punya kemampuan untuk melompat tinggi di udara saat menangkap mangsanya, yaitu serangga. Hewan air yang memiliki ciri khas sisik berwarna silver dan sirip yang panjang ini, akan bertumbuh sepanjang 1 meter saat dewasa.', 750000, 'arwana_brazil.jpg'),
-(28, 0, 'Ikan hias 2', 'ikan contoh', 234000, ''),
-(31, 0, 'Ikan hias 3', 'ikan contoh3', 111000, 'axgpay.png');
+(28, 0, 'Ikan hias 4', 'ikan contoh', 0, ''),
+(32, 0, 'Ikan hias 5', 'ikan contoh', 1500000, 'KTM_Jeremia_Joseph_P_21120117140031.jpeg');
 
 -- --------------------------------------------------------
 
@@ -158,7 +180,7 @@ INSERT INTO `ikan` (`id`, `id_jenis`, `nama_ikan`, `deskripsi`, `harga`, `gambar
 CREATE TABLE `pembayaran` (
   `id` int(11) NOT NULL,
   `nama_bank` varchar(60) NOT NULL,
-  `no_rek` varchar(25) NOT NULL,
+  `no_rekening` varchar(25) NOT NULL,
   `nama_penerima` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -166,7 +188,7 @@ CREATE TABLE `pembayaran` (
 -- Dumping data for table `pembayaran`
 --
 
-INSERT INTO `pembayaran` (`id`, `nama_bank`, `no_rek`, `nama_penerima`) VALUES
+INSERT INTO `pembayaran` (`id`, `nama_bank`, `no_rekening`, `nama_penerima`) VALUES
 (1, 'BCA', '21120117140031', 'Jeremia Joseph P'),
 (2, 'BNI', '3405987345349', 'Jeremia Joseph P'),
 (5, 'Mandiri', '789534987534', 'Jeremia Joseph P');
@@ -237,7 +259,45 @@ INSERT INTO `stok` (`id`, `id_ikan`, `status`, `keterangan`, `tanggal`) VALUES
 (56, 28, 123, 'Penambahan Stok', '2022-08-25 10:50:00'),
 (57, 29, 234, 'Penambahan stok', '2022-08-25 11:01:00'),
 (58, 30, 45, 'Penambahan stok', '2022-08-25 11:04:00'),
-(59, 31, 45, 'Penambahan stok', '2022-08-25 11:07:00');
+(59, 31, 45, 'Penambahan stok', '2022-08-25 11:07:00'),
+(60, 32, 1, 'Penambahan stok', '2022-09-12 15:23:00'),
+(61, 1, -1, 'Pembelian', '2022-09-28 14:08:14'),
+(62, 19, -1, 'Pembelian', '2022-09-28 14:08:14'),
+(63, 22, -1, 'Pembelian', '2022-09-28 16:28:02'),
+(64, 20, -3, 'Pembelian', '2022-09-28 16:45:21'),
+(65, 21, -2, 'Pembelian', '2022-09-28 16:45:21'),
+(66, 32, -1, 'Pembelian', '2022-09-28 16:45:21'),
+(69, 1, -4, 'Pembelian', '2022-09-29 12:35:37');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaksi`
+--
+
+CREATE TABLE `transaksi` (
+  `id` int(11) NOT NULL,
+  `no_transaksi` varchar(11) NOT NULL,
+  `id_ikan` int(11) NOT NULL,
+  `jumlah` int(11) NOT NULL,
+  `tanggal` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` varchar(50) NOT NULL,
+  `id_customer` int(11) NOT NULL,
+  `bukti_pembayaran` varchar(100) NOT NULL,
+  `id_pembayaran` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `transaksi`
+--
+
+INSERT INTO `transaksi` (`id`, `no_transaksi`, `id_ikan`, `jumlah`, `tanggal`, `status`, `id_customer`, `bukti_pembayaran`, `id_pembayaran`) VALUES
+(1, 'IKN09280001', 1, 1, '2022-09-28 16:49:50', 'Pembayaran Berhasil', 1, 'bukti_pembayaran.jpg', 1),
+(2, 'IKN09280001', 2, 1, '2022-09-28 16:49:50', 'Pembayaran Berhasil', 1, 'bukti_pembayaran.jpg', 1),
+(3, 'IKN09280002', 1, 1, '2022-09-28 16:43:56', 'Pembayaran Telah Dilakukan', 1, 'Webex_Virtual_Background.png', 1),
+(4, 'IKN09280002', 19, 1, '2022-09-28 16:43:56', 'Pembayaran Telah Dilakukan', 1, 'Webex_Virtual_Background.png', 1),
+(5, 'IKN09280003', 22, 1, '2022-09-28 16:43:17', 'Pembayaran Telah Dilakukan', 1, '33.jpg', 1),
+(11, 'IKN09290001', 1, 4, '2022-09-29 12:35:37', 'Menunggu Pembayaran', 2, '', 1);
 
 -- --------------------------------------------------------
 
@@ -259,12 +319,18 @@ CREATE TABLE `user_account` (
 
 INSERT INTO `user_account` (`id`, `username`, `password`, `nama_user`, `tipe_user`) VALUES
 (1, 'jpangala', '$2y$10$eRKntAHyfmKDlzJyqY0AteiPIkgPc.oGi30W1AqRN2U3nizfRDqv6', 'Jeremia', 1),
-(6, 'jek', '$2y$10$o6KZzNdOi96VnToP9PUxyOEA/KkrIOCkv.gDWs8URpUoGpMxmLXTm', 'Obed Jack Gredo', 2),
+(6, 'jek', '$2y$10$o6KZzNdOi96VnToP9PUxyOEA/KkrIOCkv.gDWs8URpUoGpMxmLXTm', 'Obed Jack Gredoo', 2),
 (12, 'felix', '$2y$10$l3sMeMI/zMkH1nRAZaMl.uHoxAF8yKP5y3bqrPReIvpBFoW7KRRM6', 'Daniel Felix', 2);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `customer`
+--
+ALTER TABLE `customer`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `detail_penjualan`
@@ -297,6 +363,12 @@ ALTER TABLE `stok`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `transaksi`
+--
+ALTER TABLE `transaksi`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user_account`
 --
 ALTER TABLE `user_account`
@@ -305,6 +377,12 @@ ALTER TABLE `user_account`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `customer`
+--
+ALTER TABLE `customer`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `detail_penjualan`
@@ -316,7 +394,7 @@ ALTER TABLE `detail_penjualan`
 -- AUTO_INCREMENT for table `ikan`
 --
 ALTER TABLE `ikan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `pembayaran`
@@ -334,7 +412,13 @@ ALTER TABLE `penjualan`
 -- AUTO_INCREMENT for table `stok`
 --
 ALTER TABLE `stok`
-  MODIFY `id` int(60) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(60) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+
+--
+-- AUTO_INCREMENT for table `transaksi`
+--
+ALTER TABLE `transaksi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_account`

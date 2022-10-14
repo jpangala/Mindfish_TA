@@ -11,9 +11,11 @@ class Data_user extends CI_Controller
     }
     public function index()
     {
+        $this->session->unset_userdata('no_penjualan');
         $where = $_SESSION['id_user'];
+        $where1              = array('customer.id' => $_SESSION['id_customer']);
+        $data['user']   = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         $data['penjualan']   = $this->model_dashboard->pesanan_berlangsung()->result();
-        $data['user']   = $this->model_penjualan->select_where('user_account',$where)->result();
         $this->load->view('user/dashboard_user', $data);
     }
     public function error()
@@ -22,29 +24,35 @@ class Data_user extends CI_Controller
     }
     public function katalog()
     {
+        $this->session->unset_userdata('no_penjualan');
         $where = $_SESSION['id_user'];
+        $where1              = array('customer.id' => $_SESSION['id_customer']);
+        $data['user']   = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         $data['ikan'] = $this->model_katalog->tampil_data_katalog()->result();
-        $data['user']   = $this->model_penjualan->select_where('user_account',$where)->result();
         $this->load->view('user/user', $data);
     }
     public function pembelian()
     {
+        $this->session->unset_userdata('no_penjualan');
         $table = 'penjualan';
         $field1 = 'id';
         $id_pembeli          = $_SESSION['id_user'];
-        $where               = array('penjualan.id_pembeli' => $id_pembeli);
-        $idmax               = $this->model_penjualan->selectmax1($table, $field1,$where);
-        $data['penjualan']   = $this->model_penjualan->select_where1($table,$where)->result();
-        $data['user']   = $this->model_penjualan->select_where('user_account',$id_pembeli)->result();
+        // $where               = array('transaksi.id_customer' => $id_pembeli);
+        // $idmax               = $this->model_penjualan->selectmax1($table, $field1,$where);
+        $where               = array('transaksi.id_customer' => $_SESSION['id_customer']);
+        $data['penjualan']   = $this->model_penjualan->tampil_data_pembelian($_SESSION['id_customer'])->result();
+        $where1              = array('customer.id' => $_SESSION['id_customer']);
+        $data['user']   = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         // $this->load->view('templates_user/sidebar_user', $data);
         $this->load->view('user/data_pembelian', $data);
     }
-    public function detail_pembelian($id)
+    public function detail_pembelian($no_transaksi)
     {
-        $table = 'penjualan';
-        $where               = $id;
-        $data['penjualan']   = $this->model_penjualan->tampil_data_detail_pembelian($where)->result();
-        $data['detail']   = $this->model_penjualan->tampil_data_detail($where)->result();
+        $where               = array('transaksi.no_transaksi' => $no_transaksi);
+        $data['penjualan']   = $this->model_penjualan->select_where1('transaksi',$where)->result();
+        $data['info']   = $this->model_penjualan->select_where2('transaksi',$where)->result();
+        $where1              = array('customer.id' => $_SESSION['id_customer']);
+        $data['user']   = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         // $this->load->view('templates_user/sidebar_user', $data);
         $this->load->view('user/detail_pembelian', $data);
     }
@@ -61,27 +69,33 @@ class Data_user extends CI_Controller
             redirect('user/data_user/katalog');
         }
 
-        $table = "penjualan";
-        $field = "no_penjualan";
+        date_default_timezone_set('Asia/Jakarta');
+        $table = "transaksi";
+        $field = "no_transaksi";
         $ambil = $this->model_penjualan->selectmax($table, $field);
+        $ambil1 = substr($ambil, 3 , -4);
+        $ambil2 = substr($ambil, -4 , 4);
 
+        $tanggal0 = date("md");
         $tanggal1 = date("d");
         $tanggal2 = date("m");
         $tanggal3 = 'IKN'.$tanggal2.''.$tanggal1.'0001';
-        if ($ambil == $tanggal3) {
+        
+        if ($ambil1 == $tanggal0) {
+            if($ambil2 >= '0001'){
             //untuk ambil 4 digit terakhir no_penjualan dan diubah ke int
             $empat = (int) substr($ambil, -4 , 4);
             $empat++;
             //untuk mengubah int sebelumnya jadi str dan ditambah IKN
             $str = 'IKN';
             $ubah = sprintf('%04s',$empat);
-            
+
             //untuk ambil tanggal
-            date_default_timezone_set('Asia/Jakarta');
             $tanggal = date("md");
 
             //gabung
-            $gabung                     = $str.''.$tanggal.''.$ubah;        
+            $gabung                     = $str.''.$tanggal.''.$ubah;
+            }
         }else {
             $gabung = 'IKN'.$tanggal2.''.$tanggal1.'0001';
         }
@@ -93,13 +107,15 @@ class Data_user extends CI_Controller
         $total_harga                = $this->cart->total();
 
         
-        $field1 = 'id';
         $id_pembeli          = $_SESSION['id_user'];
-        $idmax               = $this->model_penjualan->selectmax($table, $field1);
-        $where               = array('penjualan.id' => $idmax, 'id_pembeli' => $id_pembeli);
+        $where1              = array('customer.id_akun' => $_SESSION['id_user']);
+        $id_customer         = $this->model_penjualan->select_wheree('id','customer',$where1)->result_array();
+        $where               = array('transaksi.no_transaksi' => $_SESSION['no_penjualan'], 'id_customer' => $id_customer[0]['id']);
         $data['penjualan']   = $this->model_penjualan->select_where1($table,$where)->result();
         $data['pembayaran']  = $this->model_penjualan->tampil_data_bank()->result();
+        $data['user']        = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         $test = date('Y-m-d h:i:s');
+        var_dump($_SESSION['no_penjualan']);
         $this->load->view('user/pembayaran', $data);
         
     }
@@ -126,37 +142,21 @@ class Data_user extends CI_Controller
     public function tambah_penjualan()
     {
         $tanggal_selesai            = date("Y-m-d H:i:s", strtotime('+1 days'));
-        $alamat                     = $_POST['alamat'];
-        $bank                       = $_POST['bank'];
-        $no_penjualan               = $_SESSION['no_penjualan'];
-        $id_pembeli                 = $_SESSION['id_user'];
-        $nama_pembeli               = $_SESSION['nama_user'];
-        $total_harga                = $this->cart->total();
-
-            $data = array(
-                'id_pembeli'        => $id_pembeli,
-                'no_penjualan'      => $no_penjualan,
-                'total_harga'       => $total_harga,
-                'alamat_pengiriman' => $alamat,
-                'id_bank'           => $bank,
-                'status'            => 'Menunggu Pembayaran'
-            );
-        
-        $this->model_penjualan->tambah_penjualan($data, 'penjualan');
-        
-        $table               = 'penjualan';
-        $where               = array('id_pembeli' => $_SESSION['id_user']);
-        $id_penjualan        = $this->model_penjualan->selectmax_where1($table,$where);
-        $tanggal             = date("Y-m-d H:i:s");
+        $id_pembayaran              = $_POST['bank'];
+        $no_transaksi               = $_SESSION['no_penjualan'];
+        $where1                     = array('customer.id_akun' => $_SESSION['id_user']);
+        $id_customer                = $this->model_penjualan->select_wheree('id','customer',$where1)->result_array();
         foreach ($this->cart->contents() as $items){
         $data = array(
-            'id_ikan'        => $items['id'],
-            'id_penjualan'   => $id_penjualan,
-            'jumlah'         => $items['qty'],
-            'harga_jual'     => $items['price'],
-            'subtotal_harga' => $items['subtotal']
+            'id_ikan'           => $items['id'],
+            'jumlah'            => $items['qty'],
+            'id_customer'       => $id_customer[0]['id'],
+            'no_transaksi'      => $no_transaksi,
+            'id_pembayaran'     => $id_pembayaran,
+            'status'            => 'Menunggu Pembayaran'
         );
-        $this->model_penjualan->tambah_penjualan($data, 'detail_penjualan');
+
+        $this->model_penjualan->tambah_penjualan($data, 'transaksi');
         }
         foreach ($this->cart->contents() as $items){
                 $data = array(
@@ -175,26 +175,23 @@ class Data_user extends CI_Controller
     }
     public function invoice()
     {   
-        $table = 'penjualan';
-        $field1 = 'id';
-        $id_pembeli          = $_SESSION['id_user'];
-        $idmax               = $this->model_penjualan->selectmax($table, $field1);
-        $where               = array('penjualan.id' => $idmax, 'penjualan.id_pembeli' => $id_pembeli);
-        $data['penjualan']   = $this->model_penjualan->select_where1($table,$where)->result();
-        $data['detail']      = $this->model_penjualan->tampil_data_detail($idmax)->result();
+        $where               = array('transaksi.no_transaksi' => $_SESSION['no_penjualan']);
+        $data['penjualan']   = $this->model_penjualan->select_where1('transaksi',$where)->result();
+        $data['info']        = $this->model_penjualan->select_where2('transaksi',$where)->result();
+        $where1              = array('customer.id_akun' => $_SESSION['id_user']);
+        $data['user']   = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         // $this->load->view('templates_user/sidebar_user', $data);
+        var_dump($_SESSION['no_penjualan']);
         $this->load->view('user/invoice', $data);
     }
 
-    public function invoice_pembelian($id)
+    public function invoice_pembelian($no_transaksi)
     {   
-        $table = 'penjualan';
-        $field1 = 'id';
-        $id_pembeli          = $_SESSION['id_user'];
-        $idmax               = $this->model_penjualan->selectmax($table, $field1);
-        $where               = array('penjualan.id' => $id, 'penjualan.id_pembeli' => $id_pembeli);
-        $data['penjualan']   = $this->model_penjualan->select_where1($table,$where)->result();
-        $data['detail']      = $this->model_penjualan->tampil_data_detail($id)->result();
+        $where               = array('transaksi.no_transaksi' => $no_transaksi);
+        $data['penjualan']   = $this->model_penjualan->select_where1('transaksi',$where)->result();
+        $data['info']        = $this->model_penjualan->select_where2('transaksi',$where)->result();
+        $where1              = array('customer.id_akun' => $_SESSION['id_user']);
+        $data['user']   = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         // $this->load->view('templates_user/sidebar_user', $data);
         $this->load->view('user/invoice', $data);
     }
@@ -220,7 +217,7 @@ class Data_user extends CI_Controller
             $this->model_penjualan->hapus_data($where, 'penjualan');
             redirect('user/data_user/pembelian');
     }
-    public function submit_pembayaran($id)
+    public function submit_pembayaran($no_transaksi)
     {
         $gambar     =$_FILES['gambar']['name'];
         if ($gambar =''){}else{
@@ -235,32 +232,32 @@ class Data_user extends CI_Controller
                 $gambar=$this->upload->data('file_name');
             }
             $where = array(
-                'id' => $id
+                'no_transaksi' => $no_transaksi
             );
 
             $data = array(
                 'bukti_pembayaran' => $gambar,
                 'status' => 'Pembayaran Telah Dilakukan'
             );
-            $this->model_penjualan->update_data_penjualan($where,$data, 'penjualan');
+            $this->model_penjualan->update_data_penjualan($where,$data, 'transaksi');
             redirect('user/data_user/pembelian');
         }
     }
     public function update_profile()
     {
-        $nama           =$this->input->post('nama');
-        $no_telepon     =$this->input->post('no_telepon');
-        $alamat         =$this->input->post('alamat');
+        $nama           =$this->input->post('nama_customer');
+        $no_telepon     =$this->input->post('nomor_telp');
+        $alamat         =$this->input->post('alamat_customer');
 
             $data = array(
-                'nama_user' => $nama,
-                // 'no_telepon' => $no_telepon,
-                // 'alamat_user' => $alamat
+                'nama_customer' => $nama,
+                'nomor_telp' => $no_telepon,
+                'alamat_customer' => $alamat
             );
             $where = array(
                 'id' => $_SESSION['id_user']
             );
-            $this->model_penjualan->update_data_penjualan($where,$data,'user_account');
+            $this->model_penjualan->update_data_penjualan($where,$data,'customer');
             $this->session->set_flashdata('message', 'Profile Updated');
             $this->session->set_flashdata('icon', 'success');
             redirect('user/data_user');
@@ -273,7 +270,7 @@ class Data_user extends CI_Controller
         $confirmpass    =$this->input->post('confirmpass');
 
         $where = array('username'=>$_SESSION['username']);
-        $data['user'] = $this->login->get_user($where, 'user_account')->result();
+        $data['user'] = $this->login->get_user($where, 'akun')->result();
 
         foreach ($data['user'] as $key => $value):
             $password_cek = $value->password;
@@ -288,7 +285,7 @@ class Data_user extends CI_Controller
             $where = array(
                 'id' => $_SESSION['id_user']
             );
-            $this->model_penjualan->update_data_penjualan($where,$data,'user_account');
+            $this->model_penjualan->update_data_penjualan($where,$data,'akun');
             $this->session->set_flashdata('message', 'Password Updated');
             $this->session->set_flashdata('icon', 'success');
             redirect('user/data_user');

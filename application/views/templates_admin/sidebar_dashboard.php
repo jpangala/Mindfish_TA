@@ -30,7 +30,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo base_url('admin/data_penjualan') ?>">
                     <i class="fas fa-fw fa-database"></i>
-                    <span>Data Penjualan</span></a>
+                    <span>Data Transaksi</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo base_url('admin/data_katalog') ?>">

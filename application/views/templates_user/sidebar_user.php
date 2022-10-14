@@ -62,7 +62,7 @@
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                 <?php foreach ($user as $usr) : ?>
-                    <?= $usr->nama_user; ?>
+                    <?= $usr->nama_customer; ?>
                 <?php endforeach; ?>
                 </nav>
                 <!-- End of Topbar -->

@@ -1,7 +1,6 @@
 <?php $this->load->view('templates_user/header_user'); ?>
 <?php $this->load->view('templates_user/sidebar_user'); ?>
 <style>
-
       label {
         display: inline-block;
         width: 150px;
@@ -11,7 +10,7 @@
                             <!-- Basic Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Informasi Penjualan</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Informasi Transaksi</h6>
                                 </div>
                                 <div class="card-body">
                                   <div class="row">
@@ -20,8 +19,10 @@
                                           <input style="text-align: center;" type="text" name="jumlahstok" class="form-control" value="<?php echo $_SESSION['no_penjualan'] ?>" disabled>
                                       </div>
                                       <div class="col-lg">
+                                          <?php foreach($user as $usr) : ?>
                                           <label>Nama Pembeli</label>
-                                          <input style="text-align: center;" type="text" name="jumlahstok" class="form-control" value= "<?php echo $_SESSION['nama_user'] ?>" disabled>
+                                          <input style="text-align: center;" type="text" name="jumlahstok" class="form-control" value= "<?php echo $usr->nama_customer ?>" disabled>
+                                          <?php endforeach; ?>
                                       </div>                                      
                                       <div class="col-lg">
                                           <label>Tanggal dibuat</label>
@@ -44,17 +45,22 @@
                                         <label>Bank Pembayaran</label>
                                           <select id="" name="bank" class="form-control id">
                                             <?php foreach($pembayaran as $pmbyrn) : ?>
-                                            <option value="<?php echo $pmbyrn->id ?>"><?php echo $pmbyrn->nama_bank .' - '.  $pmbyrn->no_rek .' a/n '.  $pmbyrn->nama_penerima?></option>
+                                            <option value="<?php echo $pmbyrn->id ?>"><?php echo $pmbyrn->nama_bank .' - '.  $pmbyrn->no_rekening .' a/n '.  $pmbyrn->nama_penerima?></option>
                                             <?php endforeach; ?>
                                           </select>
                                     </div>
                                     <div class="form-group">
                                         <label>Alamat Pengiriman</label>
-                                        <input type="text" name="alamat" value="<?php echo $_SESSION['alamat_user'] ?>" class="form-control" required>
+                                        <?php foreach($user as $usr) : ?>
+                                        <input type="text" name="alamat" class="form-control" value="<?php echo $usr->alamat_customer ?>" disabled>
+                                        <?php endforeach; ?>
                                       </div>
                                       <div class="form-group">
+                                        <?php foreach($user as $usr) : ?>
                                         <label style="width: 200px;">Nomor Telepon Penerima</label>
-                                        <input type="tel" name="catatan" class="form-control" placeholder="Format : 081234567891" pattern="[0-9]{12}" required>
+                                        <input type="tel" name="catatan" class="form-control"  value="<?php echo $usr->nomor_telp?>" disabled>
+                                        <!-- placeholder="Format : 081234567891" pattern="[0-9]{12}" -->
+                                        <?php endforeach; ?>
                                       </div>
                                       <br>
                                       <div class="d-grid gap-2">
@@ -64,8 +70,6 @@
                                 </div>
                             </div>
 </div>
-
-
                             <!-- Basic Card Example -->
 
                             

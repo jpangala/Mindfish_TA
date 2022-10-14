@@ -6,13 +6,19 @@ public function __construct()
         parent::__construct();
         $this->load->model('model_katalog');
     }
-public function index()
+
+    public function index()
     {
         $this->load->view('templates_landing/header');
         $this->load->view('landing_page');
         $this->load->view('templates_landing/footer');
     }
     
+    public function test()
+    {
+        $this->load->view('datadiri');
+    }
+
 
 public function product()
     {

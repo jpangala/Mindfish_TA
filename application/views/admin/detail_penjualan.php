@@ -52,24 +52,23 @@
                       </address>
                     </div>
                     <!-- /.col -->
-                    <?php foreach ($penjualan as $pjl) : ?>
+                    <?php foreach ($info as $pjl) : ?>
                       <div class="col-sm-4 invoice-col">
                         To
                         <address>
-                          <strong><?= $pjl->nama_pembeli ?></strong><br>
-                          <?= $pjl->alamat_pengiriman ?><br>
-                          *catatan*<br>
-                          Phone: (555) 539-1037<br>
-                          <!-- <?= $pjl->nama_pembeli ?> -->
+                          <strong><?= $pjl->nama_customer ?></strong><br>
+                          <?= $pjl->alamat_customer ?><br>
+                          <!-- <br> -->
+                          Phone: <?= $pjl->nomor_telp ?><br>
                         </address>
                       </div>
                       <!-- /.col -->
                       <div class="col-sm-4 invoice-col">
                         <br>
-                        <b>Invoice #<?= $pjl->no_penjualan ?></b><br>
+                        <b>Invoice #<?= $pjl->no_transaksi ?></b><br>
                         <b>Order ID:</b> <?= $pjl->id ?><br>
-                        <b>Payment Due: </b>*tanggal_selesai*<br>
-                        <b>Account:</b> <?= $pjl->id_pembeli ?>
+                        <!-- <b>Payment Due: </b>*tanggal_selesai*<br> -->
+                        <b>Account:</b> <?= $pjl->id_customer ?>
                       </div>
                       <!-- /.col -->
                   </div>
@@ -92,18 +91,18 @@
                       <tbody>
                       <?php 
                         $total=0;
-                        foreach ($detail as $item) : 
-                        $total += $item->subtotal_harga;
+                        foreach ($penjualan as $pjl) : 
+                        $total += $pjl->subtotal_harga;
                         ?>
                           <tr>
-                            <td><?= $item->jumlah ?></td>
-                            <td><?= $item->nama_ikan ?></td>
-                            <td ><?= $item->id_ikan ?></td>
-                            <td><?= number_format($item->harga, 0, ', ', '.') ?></td>
-                            <td><?= number_format($item->subtotal_harga, 0, ', ', '.') ?></td>
+                            <td><?= $pjl->jumlah ?></td>
+                            <td><?= $pjl->nama_ikan ?></td>
+                            <td><?= $pjl->id_ikan ?></td>
+                            <td><?= number_format($pjl->harga, 0, ', ', '.') ?></td>
+                            <td><?= number_format($pjl->subtotal_harga, 0, ', ', '.') ?></td>
                           </tr>
                         <?php endforeach ?>
-                        <?php  if(!empty($detail)) { ?>
+                        <?php  if(!empty($penjualan)) { ?>
                           <tr>
                             <td colspan="4" align="right">Total :</td>
                             <td align="left">Rp <?php echo number_format($total,0,',','.') ?></td>
@@ -116,12 +115,12 @@
                 </div>
                 <!-- /.row -->
 
-                <?php foreach ($penjualan as $pjl) : ?>
+                <?php foreach ($info as $pjl) : ?>
                   <div class="row">
                     <!-- accepted payments column -->
                     <div class="col-6">
                       <p class="lead" style="margin: 0px;">Payment Methods:</p>
-                      <p class="text-muted well well-sm shadow-none" style="margin-top: 2px;"><?= $pjl->nama_bank . ' - ' . $pjl->no_rek . ' a/n ' . $pjl->nama_penerima ?></p>
+                      <p class="text-muted well well-sm shadow-none" style="margin-top: 2px;"><?= $pjl->nama_bank . ' - ' . $pjl->no_rekening . ' a/n ' . $pjl->nama_penerima ?></p>
                       <br>
                       <a href="<?php echo base_url() . 'admin/data_penjualan'; ?>" class="btn btn-outline-primary" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
                     </div>

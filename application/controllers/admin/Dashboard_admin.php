@@ -22,6 +22,8 @@ class Dashboard_admin extends CI_Controller{
         $data['grafik12'] = $this->model_dashboard->test12();
         $data['proses'] = $this->model_dashboard->menunggu_pembayaran()->result();
         $data['stok'] = count($this->model_dashboard->perubahan_stok()->result());
+
+        
         $this->load->view('admin/dashboard', $data);
     }
     public function error()

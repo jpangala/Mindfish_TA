@@ -15,7 +15,7 @@ class Dashboard extends CI_Controller{
     {
         $data['pesanan'] = $this->model_pesanan->tampil_data()->result();
         $where = array('id' =>$_SESSION["id_user"]);
-        $data['user'] = $this->model_pesanan->detail_pesanan($where, 'user_account')->result();
+        $data['user'] = $this->model_pesanan->detail_pesanan($where, 'akun')->result();
         $this->load->view('templates/header');
         $this->load->view('templates/sidebar', $data);
         $this->load->view('dashboard', $data);
@@ -61,13 +61,13 @@ class Dashboard extends CI_Controller{
                 'ikan_id' => $ikan_id,
                 'status_task' => $status,
                 'jumlah' => $jumlah,
-                'user_account_id' => $user_id,
+                'akun_id' => $user_id,
             );
 
         $query = $this->db->query("SELECT request FROM pesanan WHERE id = $pesanan_id;");
 
             $data1 = array(
-                'user_account_id' => $user_id,
+                'akun_id' => $user_id,
                 'pesanan_id' => $pesanan_id,
                 'hasil' => $jumlah,
                 'status' => "test"
@@ -90,15 +90,25 @@ class Dashboard extends CI_Controller{
       $username = $this->input->post('username');
       $password = $this->input->post('password');
       $where = array('username'=>$username);
-      $data['user'] = $this->login->get_user($where, 'user_account')->result();
-      foreach ($data['user'] as $key => $value):
+      $data['login'] = $this->login->get_user($where, 'akun')->result();
+      foreach ($data['login'] as $key => $value):
 			$username_cek = $value->username;
             $password_cek = $value->password;
             $id = $value->id;
             $tipe_user = $value->tipe_user;
             $nama = $value->nama_user;
             $alamat = $value->alamat_user;
+      endforeach;
+
+      $where1 = array('id_akun'=>$id);
+      $data['customer'] = $this->login->get_user($where1, 'customer')->result();
+      foreach ($data['customer'] as $key => $value):
+            $id_customer = $value->id;
+            $nama_customer = $value->nama_customer;
+            $nomor_telp = $value->nomor_telp;
+            $alamat_customer = $value->alamat_customer;
       endforeach; 
+
       if(!empty($username_cek)) {
 
 
@@ -106,9 +116,10 @@ class Dashboard extends CI_Controller{
       {
         $_SESSION["tipe_user"] = $tipe_user;
         if($tipe_user == 2) {
+          $_SESSION["id_customer"] = $id_customer;
           $_SESSION["id_user"] = $id;
           $_SESSION["username"] = $username;
-          $_SESSION["nama_user"] = $nama;
+          $_SESSION["nama_user"] = $nama_customer;
           $_SESSION["alamat_user"] = $alamat;
           $this->session->set_flashdata('message', 'Selamat datang '. $_SESSION["nama_user"].'');
           $this->session->set_flashdata('icon', 'success');
@@ -121,9 +132,7 @@ class Dashboard extends CI_Controller{
           $this->session->set_flashdata('icon', 'success');
           redirect('admin/dashboard_admin');
         }
-
       }
-    
     		else {
                 $this->session->set_flashdata('message', 'Username atau Password yang anda ketik salah!');
                 $this->session->set_flashdata('icon', 'error');
@@ -158,7 +167,7 @@ class Dashboard extends CI_Controller{
             'required'      => 'Kolom berikut harus diisi.',
             'max_length'      => 'Alamat terlalu panjang.'
         ]);
-        $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[3]|max_length[20]|alpha_numeric|is_unique[user_account.username]', [
+        $this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[3]|max_length[20]|alpha_numeric|is_unique[akun.username]', [
                 'is_unique'      => 'Username telah digunakan.',
                 'required'      => 'Kolom berikut harus diisi.',
                 'min_length'      => 'Username terlalu pendek.',
@@ -188,14 +197,25 @@ class Dashboard extends CI_Controller{
 
 
             $data = array(
-                'nama_user'      => $nama,
                 'username'       => $username,
                 'password'       => password_hash($password, PASSWORD_DEFAULT),
-                'alamat_user'    => $alamat,
                 'tipe_user'      => 2,
-                'no_telepon'     => $no_telepon
             );
-            $this->login->daftar($data,'user_account');
+            $this->login->daftar($data,'akun');
+            
+            $where1 = array('username'=>$username);
+            $data['customer'] = $this->login->get_user($where1, 'akun')->result();
+            foreach ($data['customer'] as $key => $value):
+            $id_akun = $value->id;
+            endforeach;
+
+            $data1 = array(
+                'id_akun'      => $id_akun,
+                'nama_customer'      => $nama,
+                'alamat_customer'    => $alamat,
+                'nomor_telp'     => $no_telepon
+            );
+            $this->login->daftar($data1,'customer');
             $this->session->set_flashdata('message', 'Registrasi akun berhasil');
             $this->session->set_flashdata('icon', 'success');
             redirect('Dashboard/masuk');
@@ -206,7 +226,7 @@ class Dashboard extends CI_Controller{
     public function task() {
 
         $where = array(
-            'user_account_id' =>$_SESSION['id_user'],
+            'akun_id' =>$_SESSION['id_user'],
             'status_task' =>"diambil"
         );
         $data['task'] = $this->model_pesanan->tampil_data_task($where, 'tampilan_task')->result();

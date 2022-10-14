@@ -8,7 +8,7 @@
       <tr>
         <th class="align-middle">No</th>
         <th class="align-middle">id_penjualan</th>
-        <th class="align-middle">Nomor Penjualan</th>
+        <th class="align-middle">Nomor Transaksi</th>
         <th class="align-middle">Nama Pembeli</th>
         <th class="align-middle">Total Harga</th>
         <th class="align-middle">Tanggal Dibuat</th>
@@ -24,10 +24,10 @@
       <tr>
         <td class="align-middle"><?php echo $no++ ?></td>
         <td class="align-middle id_penjualan"><?php echo $pjl->id ?></td>
-        <td class="align-middle no_penjualan"><?php echo $pjl->no_penjualan ?></td>
-        <td class="align-middle nama_pembeli"><?php echo $pjl->nama_pembeli ?></td>
+        <td class="align-middle no_penjualan"><?php echo $pjl->no_transaksi ?></td>
+        <td class="align-middle nama_pembeli"><?php echo $pjl->nama_customer ?></td>
         <td class="align-middle total_harga">Rp <?php echo number_format($pjl->total_harga, 0, ',', '.') ?></td>
-        <td class="align-middle tanggal_dibuat"><?php echo $pjl->tanggal_dibuat ?></td>
+        <td class="align-middle tanggal_dibuat"><?php echo $pjl->tanggal ?></td>
         <?php if ($pjl->status == 'Pembayaran Telah Dilakukan') : ?>
             <td class="align-middle" ><button class="btn btn-primary" style="border: 1px;" data-toggle="modal" data-target="#bukti_pembayaran<?php echo $pjl->id ?>"><?php echo $pjl->status ?> <i class="fas fa-file"></i></button></td>
           <?php else : ?>
@@ -35,25 +35,25 @@
         <?php endif; ?>
       <td class="align-middle">
         <?php if ($pjl->status == 'Pembayaran Telah Dilakukan') : ?>
-          <?php echo anchor('admin/data_penjualan/status_berhasil/' . $pjl->id, '<div class="btn btn-outline-primary btn-sm mb-3">Pembayaran Diterima</div>') ?>
+          <?php echo anchor('admin/data_penjualan/status_berhasil/' . $pjl->no_transaksi, '<div class="btn btn-outline-primary btn-sm mb-3">Pembayaran Diterima</div>') ?>
           <br>
         <?php elseif ($pjl->status == 'Pembayaran Berhasil') : ?>
-          <?php echo anchor('admin/data_penjualan/status_packing/' . $pjl->id, '<div class="btn btn-outline-primary btn-sm mb-3">Packing</div>') ?>
+          <?php echo anchor('admin/data_penjualan/status_packing/' . $pjl->no_transaksi, '<div class="btn btn-outline-primary btn-sm mb-3">Packing</div>') ?>
           <br>
         <?php elseif ($pjl->status == 'Proses Packing') : ?>
-          <?php echo anchor('admin/data_penjualan/status_pengiriman/' . $pjl->id, '<div class="btn btn-outline-primary btn-sm mb-3">Pengiriman</div>') ?>
+          <?php echo anchor('admin/data_penjualan/status_pengiriman/' . $pjl->no_transaksi, '<div class="btn btn-outline-primary btn-sm mb-3">Pengiriman</div>') ?>
           <br>
         <?php elseif ($pjl->status == 'Proses Pengiriman') : ?>
-          <?php echo anchor('admin/data_penjualan/status_selesai/' . $pjl->id, '<div class="btn btn-outline-primary btn-sm mb-3">Selesai</div>') ?>
+          <?php echo anchor('admin/data_penjualan/status_selesai/' . $pjl->no_transaksi, '<div class="btn btn-outline-primary btn-sm mb-3">Selesai</div>') ?>
         <?php endif; ?>
   
-        <?php echo anchor('admin/data_penjualan/detail/' . $pjl->id, '<div class="btn btn-success btn-sm"><i class="fas fa-info-circle"></i></div>') ?>
+        <?php echo anchor('admin/data_penjualan/detail/' . $pjl->no_transaksi, '<div class="btn btn-success btn-sm"><i class="fas fa-info-circle"></i></div>') ?>
         <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit_penjualan"><i class="fas fa-edit"></i></button>
         <?php if ($pjl->status == 'Menunggu Pembayaran') : ?>
-          <a href="<?php echo base_url('admin/data_penjualan/batal_penjualan/' . $pjl->id); ?>" class="btn btn-danger btn-sm tombol_hapus">Batal</a>
+          <a href="<?php echo base_url('admin/data_penjualan/batal_penjualan/' . $pjl->no_transaksi); ?>" class="btn btn-danger btn-sm tombol_hapus">Batal</a>
           <br>
         <?php else : ?>
-          <a href="<?php echo base_url('admin/data_penjualan/hapus_penjualan/' . $pjl->id); ?>" class="btn btn-danger btn-sm tombol_hapus"><i class="fas fa-trash"></i></a>
+          <a href="<?php echo base_url('admin/data_penjualan/hapus_penjualan/' . $pjl->no_transaksi); ?>" class="btn btn-danger btn-sm tombol_hapus"><i class="fas fa-trash"></i></a>
         <?php endif; ?>
 
       </td>
@@ -103,7 +103,7 @@ foreach ($penjualan as $pjl) : ?>
             <input type="text" name="id_penjualan" class="form-control id_penjualan" hidden>
           </div>
           <div class="form-group">
-            <label>Nomor Penjualan</label>
+            <label>Nomor Transaksi</label>
             <input type="text" name="no_penjualan" class="form-control no_penjualan" disabled>
           </div>
           <div class="form-group">

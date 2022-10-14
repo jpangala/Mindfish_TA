@@ -72,7 +72,7 @@
                                             <thead class="thead-dark">
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Nomor Penjualan</th>
+                                                    <th>Nomor Transaksi</th>
                                                     <th>Nama Pembeli</th>
                                                     <th>Total Harga</th>
                                                     <th>Tanggal Dibuat</th>
@@ -85,10 +85,10 @@
                                             ?>
                                                 <tr>
                                                     <td><?= $no++?></td>
-                                                    <td><?= $prs->no_penjualan?></td>
-                                                    <td><?= $prs->nama_pembeli?></td>
+                                                    <td><?= $prs->no_transaksi?></td>
+                                                    <td><?= $prs->nama_customer?></td>
                                                     <td>Rp <?= number_format($prs->total_harga,0,',','.')?></td>
-                                                    <td><?= $prs->tanggal_dibuat?></td>
+                                                    <td><?= $prs->tanggal?></td>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </table>
@@ -109,7 +109,7 @@
     $pjl1 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -117,7 +117,7 @@
     $pjl2 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -125,7 +125,7 @@
     $pjl3 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -133,7 +133,7 @@
     $pjl4 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -141,7 +141,7 @@
     $pjl5 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -149,7 +149,7 @@
     $pjl6 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -157,7 +157,7 @@
     $pjl7 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -165,14 +165,14 @@
     $pjl8 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
   foreach ($grafik9 as $row) :
     $pjl9 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -180,7 +180,7 @@
     $pjl10 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -188,7 +188,7 @@
     $pjl11 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
 
@@ -196,7 +196,7 @@
     $pjl12 = $row->jumlah;
     // $penjualan .= "'$pjl'" . ",";
 
-    $tgl = substr($row->tanggal_dibuat,8,-9);
+    $tgl = substr($row->tanggal,8,-9);
     $tanggal .= "'$tgl'" . ",";
   endforeach;
     $test = "'$pjl1',"."'$pjl2',"."'$pjl3',"."'$pjl4','$pjl5',"."'$pjl6',"."'$pjl7',"."'$pjl8','$pjl9',"."'$pjl10',"."'$pjl11',"."'$pjl12'";
@@ -249,7 +249,7 @@ var ctx = document.getElementById("myAreaChart");
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ['Januari','Februari','Maret','April','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+    labels: ['Jan','Feb','Maret','Apr','Mei','Juni','Juli','Agustus','Sept','Okt','Nov','Des'],
     datasets: [{
       label: "Jumlah Penjualan Perbulan",
       lineTension: 0.3,
