@@ -37,7 +37,7 @@ class Model_dashboard extends CI_Model{
         $this->db->join('customer', 'customer.id = transaksi.id_customer', 'left');
         $this->db->join('pembayaran', 'pembayaran.id = transaksi.id_pembayaran', 'left');
         $this->db->group_by('transaksi.no_transaksi');
-        $this->db->where('status != "Menunggu Pembayaran" AND status != "Selesai"');
+        $this->db->where('status != "Menunggu Pembayaran" AND status != "Selesai" AND id_customer = '.$_SESSION["id_customer"].'');
         return $this->db->get();
     }
     

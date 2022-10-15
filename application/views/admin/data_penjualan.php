@@ -7,13 +7,13 @@
     <thead class="thead-dark">
       <tr>
         <th class="align-middle">No</th>
-        <th class="align-middle">id_penjualan</th>
+        <th class="align-middle id_penjualan">id_penjualan</th>
         <th class="align-middle">Nomor Transaksi</th>
         <th class="align-middle">Nama Pembeli</th>
         <th class="align-middle">Total Harga</th>
         <th class="align-middle">Tanggal Dibuat</th>
         <th class="align-middle">Status</th>
-        <th class="align-middle">AKSI</th>
+        <th class="align-middle aksi">AKSI</th>
       </tr>
     </thead>
 
@@ -243,7 +243,7 @@ $(document).ready(function() {
         dom: 'Bfrtip',
         "retrieve":true,"responsive": true, "lengthChange": false, "autoWidth": false,"ordering": false,
         buttons: [
-             'pdf', 'print'
+          {extend:'pdf',exportOptions: {columns: [0,2,3,4,5,6]}}, {extend:'print',exportOptions: {columns: [0,2,3,4,5,6]}}
         ],
         "aoColumnDefs": [ { "sClass": "dpass", "aTargets": [ 1 ]} ]
       

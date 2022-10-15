@@ -221,25 +221,31 @@ class Data_user extends CI_Controller
         $gambar     =$_FILES['gambar']['name'];
         if ($gambar =''){}else{
             $config ['upload_path'] = './uploads';
-            $config ['allowed_types'] = 'jpg|jpeg|png';
-            $table = 'penjualan';
+            $config ['allowed_types'] = 'jpeg|jpg|png';
+            $config ['max_size'] = 2000;
+
 
             $this->load->library('upload', $config);
             if(!$this->upload->do_upload('gambar')){
-                echo "Gambar Gagal diUpload!";
+                $this->session->set_flashdata('message', 'Bukti Pembayaran Gagal Diunggah');
+                $this->session->set_flashdata('icon', 'error');
+                redirect('user/data_user/invoice');
             }else{
                 $gambar=$this->upload->data('file_name');
-            }
-            $where = array(
-                'no_transaksi' => $no_transaksi
-            );
 
-            $data = array(
-                'bukti_pembayaran' => $gambar,
-                'status' => 'Pembayaran Telah Dilakukan'
-            );
-            $this->model_penjualan->update_data_penjualan($where,$data, 'transaksi');
-            redirect('user/data_user/pembelian');
+                $where = array(
+                    'no_transaksi' => $no_transaksi
+                );
+    
+                $data = array(
+                    'bukti_pembayaran' => $gambar,
+                    'status' => 'Pembayaran Telah Dilakukan'
+                );
+                $this->model_penjualan->update_data_penjualan($where,$data, 'transaksi');
+                $this->session->set_flashdata('message', 'Bukti Pembayaran Berhasil Diunggah');
+                $this->session->set_flashdata('icon', 'success');
+                redirect('user/data_user/pembelian');
+            }
         }
     }
     public function update_profile()

@@ -207,3 +207,36 @@
 
 </script>
 <?php $this->load->view('templates_admin/footer');?>
+<script>
+        /*  Initialize Sweet Alert */
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast'
+            },
+            showConfirmButton: false,
+            showCloseButton: true,
+            timer: 5000,
+            timerProgressBar: true
+        })
+
+        /*  get session message and color */
+        var message = <?php echo json_encode($this->session->flashdata('message')) ?>;
+        var icon = <?php echo json_encode($this->session->flashdata('icon')) ?>;
+
+        /*  sweet alert message */
+        if (Boolean(message)) {
+            Toast.fire({
+                icon: icon,
+                title: message
+            })
+        }
+    </script>
+        <?php
+    if ($this->session->flashdata('message') && $this->session->flashdata('icon')) {
+        unset($_SESSION['message']);
+        unset($_SESSION['icon']);
+    }
+    ?>

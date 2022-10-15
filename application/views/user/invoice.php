@@ -59,7 +59,7 @@
                           <strong><?= $pjl->nama_customer ?></strong><br>
                           <?= $pjl->alamat_customer ?><br>
                           <br>
-                          Phone: <?= $pjl->nomor_telp ?><br>
+                          Nomor Telepon: <?= $pjl->nomor_telp ?><br>
                         </address>
                       </div>
                       <!-- /.col -->
@@ -67,8 +67,8 @@
                         <br>
                         <b>Invoice #<?= $pjl->no_transaksi ?></b><br>
                         <b>Order ID:</b> <?= $pjl->id ?><br>
-                        <b>Payment Due: </b>*tanggal_selesai*<br>
-                        <b>Account:</b> <?= $pjl->id_customer ?>
+                        <!-- <b>Payment Due: </b>*tanggal_selesai*<br> -->
+                        <b>ID Customer:</b> <?= $pjl->id_customer ?>
                       </div>
                       <!-- /.col -->
                   </div>
@@ -125,6 +125,7 @@
                       <form action="<?php echo base_url('user/data_user/submit_pembayaran/' . $pjl->no_transaksi) ?>" method="post" enctype="multipart/form-data">
                         <label for="exampleFormControlFile1">Input Bukti Pembayaran Disini</label>
                         <input type="file" name="gambar" class="form-control-file" id="exampleFormControlFile1" required>
+                        <label for="exampleFormControlFile1">Ukuran File Maks 2MB (JPEG, JPG, dan PNG)</label>
                     </div>
                     <!-- /.col -->
                     <div class="col-6">
@@ -161,6 +162,39 @@
 
     <script src="<?php echo base_url() ?>assets/vendor/jquery/jquery.min.js"></script>
     <?php $this->load->view('templates_admin/footer'); ?>
+    <script>
+        /*  Initialize Sweet Alert */
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-right',
+            iconColor: 'white',
+            customClass: {
+                popup: 'colored-toast'
+            },
+            showConfirmButton: false,
+            showCloseButton: true,
+            timer: 5000,
+            timerProgressBar: true
+        })
+
+        /*  get session message and color */
+        var message = <?php echo json_encode($this->session->flashdata('message')) ?>;
+        var icon = <?php echo json_encode($this->session->flashdata('icon')) ?>;
+
+        /*  sweet alert message */
+        if (Boolean(message)) {
+            Toast.fire({
+                icon: icon,
+                title: message
+            })
+        }
+    </script>
+        <?php
+    if ($this->session->flashdata('message') && $this->session->flashdata('icon')) {
+        unset($_SESSION['message']);
+        unset($_SESSION['icon']);
+    }
+    ?>
   </body>
 
   </html>
