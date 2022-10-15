@@ -115,7 +115,6 @@ class Data_user extends CI_Controller
         $data['pembayaran']  = $this->model_penjualan->tampil_data_bank()->result();
         $data['user']        = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         $test = date('Y-m-d h:i:s');
-        var_dump($_SESSION['no_penjualan']);
         $this->load->view('user/pembayaran', $data);
         
     }
@@ -142,6 +141,7 @@ class Data_user extends CI_Controller
     public function tambah_penjualan()
     {
         $tanggal_selesai            = date("Y-m-d H:i:s", strtotime('+1 days'));
+        $tanggal                    = date("Y-m-d H:i:s");
         $id_pembayaran              = $_POST['bank'];
         $no_transaksi               = $_SESSION['no_penjualan'];
         $where1                     = array('customer.id_akun' => $_SESSION['id_user']);
@@ -181,7 +181,6 @@ class Data_user extends CI_Controller
         $where1              = array('customer.id_akun' => $_SESSION['id_user']);
         $data['user']   = $this->model_penjualan->select_wheree('*','customer',$where1)->result();
         // $this->load->view('templates_user/sidebar_user', $data);
-        var_dump($_SESSION['no_penjualan']);
         $this->load->view('user/invoice', $data);
     }
 
